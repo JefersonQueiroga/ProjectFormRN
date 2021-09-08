@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "projectFormRN",
+    "slug": "projectFormRN",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "projectFormRN"
+}
