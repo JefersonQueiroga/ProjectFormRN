@@ -1,19 +1,35 @@
 import React,{useState} from 'react'
 import {View,Text,StyleSheet,SafeAreaView,TextInput,Button} from 'react-native'
 import { TouchableOpacity } from 'react-native';
+import { InputForm } from '../components/InputForm';
 
+// import form
+import { useForm, Controller } from "react-hook-form";
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
+// YUP
+const schema = yup.object().shape({
+    descricao: yup.string().required(),
+    idade: yup.number().typeError('Informe um valor númerico')
+    .required().positive().integer(),
+    nome: yup.string().required("Informe o nome"),
+});
 
 export function Home(){
-    const [descricao, setDescricao] = useState('');
-   
+
+
+    // constante retornadas pelo react-hook-form
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(schema)
+    });
    
     function onchangeText(data) {
         console.log(data);
     }  
 
-    function handleSendForm(){
-        console.log("Texto enviado: " + descricao);
+    function handleSendForm(data){
+        console.log("Texto enviado: " + JSON.stringify( data ) );
     }
    
     return(
@@ -21,11 +37,32 @@ export function Home(){
             <Text style={styles.title}>Cadastro de Tarefa</Text>
             
             <View style={styles.form}>
-              <TextInput style={styles.input} placeholder="Descrição" onChangeText={x => setDescricao(x)}/>  
+               
+            <Controller
+                control={control}
+                rules={{required: true, }}
+                render={({ field: { onChange, onBlur, value } }) => ( 
+               
+                    <TextInput style={styles.input} onBlur={onBlur} placeholder="Descrição" onChangeText={onChange}/>  
               
-              <TouchableOpacity style={styles.button} onPress={handleSendForm}>
+                )}
+              name="descricao"/>
+            
+            {errors.descricao && <Text style={styles.error}>Campo Obrigatório</Text>}
+
+            <InputForm name='idade' control={control} 
+                placeholder="Idade"
+                error={ errors.idade && errors.idade.message } />
+
+            <InputForm name='nome' control={control} 
+                placeholder="Nome"
+                error={ errors.nome && errors.nome.message } />
+
+
+              <TouchableOpacity style={styles.button} onPress={ handleSubmit ( handleSendForm )}>
                 <Text style={styles.textButton}>Salvar</Text>
               </TouchableOpacity>
+          
             </View>
         </SafeAreaView>
     )

@@ -1,38 +1,33 @@
 import React from 'react'
-import {View,Text,TextInput, StyleSheet} from 'react-native'
-import { Control, Controller } from "react-hook-form";
 
+import { useForm, Controller } from "react-hook-form";
+import {View,Text,StyleSheet,TextInput} from 'react-native'
 
-export function InputForm({control,name,error,...rest}){
-    
-    const styleError = error ? "{'borderColor': 'red'}" : "";
-    console.log(styles.input);
+export function InputForm({control, name,error, ...rest }){
     return(
-        <View style={ styleError}>
-        <Controller
-        control={control}
-     
-        render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-                style={[styles.input,error? styles.inputError : '']}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                {...rest}
-            />
-        )}
-        name={name}
-        />
-        {error && <Text style={ styles.error }>{error}</Text>}
-      </View>
+        <View>
+            <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => ( 
+               
+                    <TextInput style={[styles.input, error ? styles.inputError : ""]} 
+                      onBlur={onBlur} {...rest}
+                      onChangeText={onChange}/>  
+              
+                )}
+              name={name}/>
+            
+            { error && <Text style={styles.error}>{error}</Text>}
+        </View>
     )
-} 
+}
+
 
 const styles = StyleSheet.create({
     container:{
-        width: '100%',
-   },
-   input:{
+        width: "100%"
+    },
+    input:{
         height: 55,
         width: '100%',
         borderColor: '#B2B2B2',
@@ -47,8 +42,7 @@ const styles = StyleSheet.create({
         borderColor: 'red',
     },
     error:{
-        color: 'red',
-        fontFamily: 'Roboto_400Regular',
         fontSize: 15,
-    }
-});
+        color: 'red',
+    },
+})
